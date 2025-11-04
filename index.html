@@ -1029,7 +1029,6 @@ header {
                 const { data, error } = await supabase
                     .from('log_entries')
                     .upsert([{
-                        id: editingEntryId || currentLogEntry.id || undefined,
                         date: currentLogEntry.date.toISOString(),
                         practiced: currentLogEntry.practiced,
                         moods: currentLogEntry.moods,
@@ -1260,4 +1259,5 @@ header {
         }
     </script>
 </body>
+
 </html>
