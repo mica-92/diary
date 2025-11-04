@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dainandinī</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'><path d='M201.7 291.5C236 310.2 266.2 335.6 290.5 366C301.6 379.9 311.5 394.9 319.9 410.8C328.4 394.9 338.2 380 349.3 366C373.6 335.5 403.8 310.1 438.1 291.5C479.8 268.8 527.5 256 577.8 256L587.7 256C598.8 256 607.8 265 607.8 276.1C607.8 424.1 487.9 544 339.9 544L299.7 544C151.9 544 32 424.1 32 276.1C32 265 41 256 52.1 256L62 256C112.4 256 160.1 268.8 201.7 291.5zM335.9 102C352.8 117.9 397.3 165.4 424.9 244.3C384.8 264.5 349.1 292.5 320 326.4C290.8 292.5 255.2 264.6 215.1 244.3C242.7 165.4 287.3 117.9 304.1 102C308.4 97.9 314.1 96 320 96C325.9 96 331.6 98 335.9 102z'/></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Incluir Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            /* Colores base */
+            --bck: #a6b39a;
+            --primary-color: #515b4470;
+            --accent-color: #515b44;
+            --border-color: #fff7ccff;
+            --hover-color: #333333;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --yellow-accent: #f8dc3dff;
+            --red-accent: #f6442fff;
+            --blue-accent: #2f49f6ff;
+            
+            /* Filtros de imagen por sección */
+            --study-hue: 170deg;
+            --lexicon-hue: 120deg;
+            --lexicon-list-hue: 120deg;
+            --log-hue: 220deg;
+            --log-accent: #515b44;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inconsolata", monospace;
+        }
+/* Header fijo */
+header {
+    padding: 15px 20px;
+    color: var(--bck);
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border-bottom: 3px solid var(--text-dark);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent-color);
+}
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background-color: var(--bck);
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        /* Contenedor principal con scroll */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        main {
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Barra de navegación fija */
+        .nav-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--primary-color);
+            border-top: 3px solid var(--text-dark);
+            z-index: 1000;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: var(--primary-color);
+            border: none;
+            border-right: 1px solid var(--text-dark);
+            color: var(--text-dark);
+            padding: 12px 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.7rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .nav-btn:last-child {
+            border-right: none;
+        }
+
+        .nav-btn.active {
+            background: var(--accent-color);
+            color: var(--bck);
+        }
+
+        .nav-btn:hover {
+            background: var(--yellow-accent);
+            color: var(--text-dark);
+        }
+
+        .nav-btn i {
+            font-size: 1rem;
+        }
+
+        /* Estilos para la bitácora */
+        .log-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* HEADER CON FECHA Y BOTONES CIRCULARES */
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 2px solid var(--text-dark);
+        }
+
+        .log-date {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            flex: 1;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--text-dark);
+            background: var(--log-accent);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--yellow-accent);
+            color: var(--text-dark);
+        }
+
+        /* PRACTICASTE HOY SECCION */
+        .practice-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .practice-button {
+            display: inline-block;
+            width: 33px;
+            height: 33px;
+            background-color: var(--red-accent);
+            border: 3px solid var(--text-dark);
+            border-radius: 25px;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .practice-state {
+            font-weight: bold;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .practice-button.yes {
+            background-color: var(--accent-color);
+        }
+
+        .practice-button.yes .practice-state {
+            color: var(--text-light);
+        }
+
+        /* MOOD SECTION - NUEVO DISEÑO UNIFICADO */
+        .mood-section {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 2px solid #333;
+        }
+
+        .mood-board {
+            display: flex;
+            gap: 10px;
+            margin: 0;
+            justify-content: flex-end;
+            flex: 1;
+        }
+
+        .mood-item {
+            width: 33px;
+            height: 33px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid var(--text-dark);
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+
+        .mood-item.selected {
+            transform: scale(1.1);
+            filter: hue-rotate(90deg);
+            color: #505749;
+        }
+
+        .detail-label {
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .notes-section {
+            padding: 12px;
+            border-bottom: 2px solid #333;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 2px solid var(--text-dark);
+            background: rgb(233, 196, 106);
+            font-family: "Inconsolata", monospace;
+            resize: vertical;
+        }
+
+        /* TAGS SECTION */
+        .tags-section {
+            padding: 12px;
+            border-bottom: 2px solid #333;
+        }
+
+        .tags-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tag-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid var(--text-dark);
+            background: rgba(233, 165, 106, 0.4);
+            color: var(--text-dark);
+        }
+
+        .add-tag-btn {
+            background: var(--log-accent);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 0;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-tag-btn:hover {
+            background: var(--yellow-accent);
+            color: var(--text-dark);
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-bottom: 12px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--accent-color);
+            border: 2px solid var(--text-dark);
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        /* ASANAS SECTION */
+        .asanas-section {
+            padding: 12px;
+            border-bottom: 2px solid #333;
+        }
+
+        .asanas-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .asana-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid var(--text-dark);
+            color: var(--text-dark);
+            background-color: rgba(233, 165, 106, 0.4);
+        }
+
+        .add-asana-btn {
+            background: var(--log-accent);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 0;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-asana-btn:hover {
+            background: var(--yellow-accent);
+            color: var(--text-dark);
+        }
+
+        .asanas-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .asana-tag {
+            display: inline-block;
+            background: var(--accent-color);
+            border: 2px solid var(--text-dark);
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .asana-search-results {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 2px solid var(--text-dark);
+            background: var(--primary-color);
+            margin-top: 8px;
+        }
+
+        .asana-search-result {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--text-dark);
+            cursor: pointer;
+        }
+
+        .asana-search-result:hover {
+            background: rgba(47, 139, 246, 0.2);
+        }
+
+        .asana-search-result:last-child {
+            border-bottom: none;
+        }
+
+        .log-history {
+            padding: 12px;
+        }
+
+        .log-entry {
+            border: 2px solid var(--accent-color);
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #515b4470;
+            border-left: 10px solid var(--accent-color);
+        }
+
+        .log-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--text-dark);
+            padding-bottom: 5px;
+        }
+
+        .log-entry-date {
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .log-entry-moods {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .log-entry-mood {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 1px solid var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .log-entry-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .log-entry-tag {
+            background: rgba(47, 139, 246, 0.2);
+            border: 1px solid var(--text-dark);
+            padding: 3px 8px;
+            font-size: 0.8rem;
+        }
+
+        .log-entry-notes {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-left: 3px solid var(--log-accent);
+        }
+
+        .edit-notes-btn {
+            background: var(--log-accent);
+            color: white;
+            border: 2px solid var(--text-dark);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .edit-notes-btn:hover {
+            background: var(--yellow-accent);
+            color: var(--text-dark);
+        }
+
+        /* Estilos para pantallas grandes */
+        @media (min-width: 768px) {
+            .mood-section {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .practice-toggle {
+                width: 30%;
+                text-align: left;
+                justify-content: flex-start;
+                padding-right: 0;
+            }
+
+            .mood-board {
+                width: 70%;
+                justify-content: flex-end;
+            }
+        }
+
+        /* Estilos para pantallas pequeñas */
+        @media (max-width: 767px) {
+            .log-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .practice-toggle {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .mood-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .mood-board {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        dainandinī
+    </header>
+    
+    <div class="app-container">
+        <div class="content">
+            <main>
+                <!-- Nueva sección Bitácora -->
+                <section id="log" class="section active">
+                    <div class="log-container">
+                        <!-- HEADER CON FECHA Y BOTONES CIRCULARES -->
+                        <div class="log-header">
+                            <div class="log-date" id="current-date">DD/MM/YYYY</div>
+                            <div class="header-actions">
+                                <button class="header-btn" id="save-log-btn" title="Guardar">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                </button>
+                                <button class="header-btn" id="clear-log-btn" title="Limpiar">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- SECCIÓN PRACTICASTE HOY Y MOOD BOARD -->
+                        <div class="mood-section">
+                            <div class="practice-toggle">
+                                <span>PRACTICASTE HOY:</span>
+                                <div class="practice-button" id="practice-button">
+                                    <div class="practice-state">NO</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mood-board" id="mood-board">
+                                <!-- Los elementos del mood board se generarán con JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- SECCIÓN NOTAS -->
+                        <div class="notes-section">
+                            <div class="detail-label">NOTAS DE LA PRÁCTICA:</div>
+                            <textarea class="notes-textarea" id="practice-notes" placeholder="Escribe tus notas aquí..."></textarea>
+
+                            <div class="tags-input">
+                                <input type="text" class="tag-input" id="tag-input" placeholder="Vincular etiquetas...">
+                                <button class="add-tag-btn" id="add-tag-btn">+</button>
+                            </div>
+                            <div class="tags-list" id="tags-list">
+                                <!-- Los tags se mostrarán aquí -->
+                            </div>
+                        
+                            <div class="asanas-input">
+                                <input type="text" class="asana-input" id="asana-search-input" placeholder="Vincular āsana...">
+                                <button class="add-asana-btn" id="add-asana-btn">+</button>
+                            </div>
+                            <div class="asana-search-results" id="asana-search-results" style="display: none;">
+                                <!-- Los resultados de búsqueda aparecerán aquí -->
+                            </div>
+                            <div class="asanas-list" id="asanas-list">
+                                <!-- Los āsanas vinculados se mostrarán aquí -->
+                            </div>
+                        </div>
+                        
+                        <!-- HISTORIAL -->
+                        <div class="log-history" id="log-history">
+                            <h3 style="text-align: center; margin-bottom: 15px;">HISTORIAL DE PRÁCTICAS</h3>
+                            <!-- Las entradas anteriores se mostrarán aquí -->
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Otras secciones... -->
+                <section id="study" class="section">
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>SECCIÓN DE ESTUDIO</h2>
+                        <p>Contenido de estudio aparecerá aquí</p>
+                    </div>
+                </section>
+                
+                <section id="list" class="section">
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>SECCIÓN DE LISTA</h2>
+                        <p>Lista de ásanas aparecerá aquí</p>
+                    </div>
+                </section>
+
+                <section id="lexicon" class="section">
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>SECCIÓN LEXICÓN</h2>
+                        <p>Contenido del lexicón aparecerá aquí</p>
+                    </div>
+                </section>
+
+                <section id="lexicon-list" class="section">
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>SECCIÓN LISTA LEXICÓN</h2>
+                        <p>Lista de términos aparecerá aquí</p>
+                    </div>
+                </section>
+
+                <section id="about" class="section">
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>ACERCA DE</h2>
+                        <p>Información sobre la aplicación</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Barra de navegación fija -->
+    <div class="nav-bar">
+        <div class="nav-menu">
+            <button class="nav-btn active" data-section="log">
+                <i class="fa-solid fa-book"></i>
+                <span>BITÁCORA</span>
+            </button>
+            <button class="nav-btn" data-section="study">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>ESTUDIO</span>
+            </button>
+            <button class="nav-btn" data-section="list">
+                <i class="fa-solid fa-list"></i>
+                <span>LISTA</span>
+            </button>
+            <button class="nav-btn" data-section="lexicon">
+                <i class="fa-solid fa-book-open"></i>
+                <span>LEXICÓN</span>
+            </button>
+            <button class="nav-btn" data-section="lexicon-list">
+                <i class="fa-solid fa-list-check"></i>
+                <span>LISTA LEXICÓN</span>
+            </button>
+            <button class="nav-btn" data-section="about">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>ACERCA DE</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = 'https://edkumnfbwzpeuifbxubp.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVka3VtbmZid3pwZXVpZmJ4dWJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyMDI2NjgsImV4cCI6MjA3Nzc3ODY2OH0.EhiZN_2EVDcQ8LdE-V1T3LknzUDsiya697K3P4kbu5E';
+        
+        // Inicializar cliente de Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Configuración de los estados de ánimo
+        const moodOptions = [
+            { name: 'feliz', label: 'Feliz', emoji: '<i class="fa-solid fa-face-laugh-beam"></i>', color: '#2a9d8f' },
+            { name: 'enojado', label: 'Meh', emoji: '<i class="fa-solid fa-face-meh"></i>', color: '#e9c46a' },
+            { name: 'cansancio', label: 'Cansada', emoji: '<i class="fa-solid fa-face-tired"></i>', color: '#bc4749' },
+            { name: 'relajado', label: 'Relajada', emoji: '<i class="fa-solid fa-heart"></i>', color: '#FF9A76' },
+            { name: 'energico', label: 'Energica', emoji: '<i class="fa-solid fa-bolt-lightning"></i>', color: '#95E1D3' },
+            { name: 'inconclusa', label: 'Inconclusa', emoji: '<i class="fa-solid fa-xmark"></i>', color: '#bc6c25' },
+            { name: 'complete', label: 'Completa', emoji: '<i class="fa-solid fa-check"></i>', color: '#81b29a' },
+
+            { name: 'primera', label: 'Primera', emoji: '<i class="fa-solid fa-1"></i>', color: '#da627d' },
+            { name: 'segunda', label: 'Segunda', emoji: '<i class="fa-solid fa-2"></i>', color: '#ffa5ab' },
+
+
+
+            ];
+
+        // Datos de ejemplo para asanas
+        const sampleAsanas = [
+            { id: 'tadasana', name: 'Tadasana', sanskrit: 'ताडासन', english: 'Mountain Pose' },
+            { id: 'adho_mukha_svanasana', name: 'Adho Mukha Svanasana', sanskrit: 'अधो मुख श्वानासन', english: 'Downward-Facing Dog' },
+            { id: 'virabhadrasana_i', name: 'Virabhadrasana I', sanskrit: 'वीरभद्रासन I', english: 'Warrior I' },
+            { id: 'virabhadrasana_ii', name: 'Virabhadrasana II', sanskrit: 'वीरभद्रासन II', english: 'Warrior II' },
+            { id: 'balasana', name: 'Balasana', sanskrit: 'बालासन', english: 'Child\'s Pose' }
+        ];
+
+        // Variables globales
+        let currentLogEntry = {
+            date: new Date(),
+            practiced: false,
+            moods: [],
+            notes: "",
+            tags: [],
+            asanas: []
+        };
+
+        let logHistory = [];
+        let selectedMoods = [];
+        let currentTags = [];
+        let currentAsanas = [];
+        let editingEntryId = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLogSection();
+            setupEventListeners();
+            loadLogHistory();
+            setupNavigation();
+        });
+
+        // Inicializar la sección de bitácora
+        function initializeLogSection() {
+            // Establecer fecha actual
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            document.getElementById('current-date').textContent = `HOY: ${formattedDate}`;
+            
+            // Inicializar mood board
+            initializeMoodBoard();
+            
+            // Inicializar búsqueda de asanas
+            initializeAsanaSearch();
+        }
+
+        // Inicializar mood board
+        function initializeMoodBoard() {
+            const moodBoard = document.getElementById('mood-board');
+            moodBoard.innerHTML = '';
+            
+            moodOptions.forEach((mood, index) => {
+                const moodItem = document.createElement('div');
+                moodItem.className = 'mood-item';
+                moodItem.innerHTML = mood.emoji;
+                moodItem.title = mood.label;
+                moodItem.dataset.index = index;
+                moodItem.style.backgroundColor = mood.color;
+                
+                moodItem.addEventListener('click', function() {
+                    toggleMoodSelection(index);
+                });
+                
+                moodBoard.appendChild(moodItem);
+            });
+        }
+
+        // Alternar selección de mood
+        function toggleMoodSelection(index) {
+            const moodItem = document.querySelector(`.mood-item[data-index="${index}"]`);
+            
+            if (selectedMoods.includes(index)) {
+                // Deseleccionar
+                selectedMoods = selectedMoods.filter(i => i !== index);
+                moodItem.classList.remove('selected');
+            } else {
+                // Seleccionar
+                selectedMoods.push(index);
+                moodItem.classList.add('selected');
+            }
+            
+            // Actualizar entrada actual
+            currentLogEntry.moods = selectedMoods.map(i => moodOptions[i]);
+        }
+
+        // Inicializar búsqueda de asanas
+        function initializeAsanaSearch() {
+            const searchInput = document.getElementById('asana-search-input');
+            const searchResults = document.getElementById('asana-search-results');
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                if (query.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                // Filtrar asanas
+                const filteredAsanas = sampleAsanas.filter(asana => 
+                    asana.name.toLowerCase().includes(query) ||
+                    asana.sanskrit.toLowerCase().includes(query) ||
+                    asana.english.toLowerCase().includes(query) ||
+                    asana.id.toLowerCase().includes(query)
+                );
+                
+                // Mostrar resultados
+                displayAsanaSearchResults(filteredAsanas);
+            });
+        }
+
+        // Mostrar resultados de búsqueda de asanas
+        function displayAsanaSearchResults(asanas) {
+            const searchResults = document.getElementById('asana-search-results');
+            
+            if (asanas.length === 0) {
+                searchResults.innerHTML = '<div class="asana-search-result">No se encontraron āsanas</div>';
+                searchResults.style.display = 'block';
+                return;
+            }
+            
+            searchResults.innerHTML = '';
+            
+            asanas.forEach(asana => {
+                const result = document.createElement('div');
+                result.className = 'asana-search-result';
+                result.innerHTML = `
+                    <strong>${asana.name}</strong> (${asana.sanskrit})<br>
+                    <small>${asana.english} - ID: ${asana.id}</small>
+                `;
+                
+                result.addEventListener('click', function() {
+                    addAsanaToLog(asana);
+                    document.getElementById('asana-search-input').value = '';
+                    searchResults.style.display = 'none';
+                });
+                
+                searchResults.appendChild(result);
+            });
+            
+            searchResults.style.display = 'block';
+        }
+
+        // Añadir asana a la entrada actual
+        function addAsanaToLog(asana) {
+            if (!currentAsanas.some(a => a.id === asana.id)) {
+                currentAsanas.push(asana);
+                updateAsanasDisplay();
+            }
+        }
+
+        // Actualizar visualización de asanas
+        function updateAsanasDisplay() {
+            const asanasList = document.getElementById('asanas-list');
+            asanasList.innerHTML = '';
+            
+            currentAsanas.forEach((asana, index) => {
+                const asanaElement = document.createElement('span');
+                asanaElement.className = 'asana-tag';
+                asanaElement.textContent = asana.name;
+                
+                const removeBtn = document.createElement('span');
+                removeBtn.innerHTML = ' &times;';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.marginLeft = '5px';
+                removeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    currentAsanas.splice(index, 1);
+                    updateAsanasDisplay();
+                });
+                
+                asanaElement.appendChild(removeBtn);
+                asanasList.appendChild(asanaElement);
+            });
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Toggle de práctica
+            document.getElementById('practice-button').addEventListener('click', function() {
+                this.classList.toggle('yes');
+                const practiceState = this.querySelector('.practice-state');
+                currentLogEntry.practiced = this.classList.contains('yes');
+                practiceState.textContent = currentLogEntry.practiced ? 'SÍ' : 'NO';
+            });
+
+            // Añadir tag
+            document.getElementById('add-tag-btn').addEventListener('click', function() {
+                const tagInput = document.getElementById('tag-input');
+                const tagText = tagInput.value.trim();
+                
+                if (tagText && !currentTags.includes(tagText)) {
+                    currentTags.push(tagText);
+                    updateTagsDisplay();
+                    tagInput.value = '';
+                }
+            });
+
+            // Añadir asana manualmente
+            document.getElementById('add-asana-btn').addEventListener('click', function() {
+                const asanaInput = document.getElementById('asana-search-input');
+                const asanaText = asanaInput.value.trim();
+                
+                if (asanaText) {
+                    const customAsana = {
+                        id: 'custom_' + Date.now(),
+                        name: asanaText,
+                        sanskrit: '',
+                        english: ''
+                    };
+                    
+                    addAsanaToLog(customAsana);
+                    asanaInput.value = '';
+                }
+            });
+
+            // Guardar entrada
+            document.getElementById('save-log-btn').addEventListener('click', function() {
+                saveLogEntry();
+            });
+
+            // Limpiar entrada actual
+            document.getElementById('clear-log-btn').addEventListener('click', function() {
+                clearCurrentEntry();
+            });
+        }
+
+        // Configurar navegación
+        function setupNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Actualizar botones activos
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar sección correspondiente
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(targetSection).classList.add('active');
+                });
+            });
+        }
+
+        // Guardar entrada de bitácora
+        async function saveLogEntry() {
+            // Actualizar datos de la entrada actual
+            currentLogEntry.date = new Date();
+            currentLogEntry.notes = document.getElementById('practice-notes').value;
+            currentLogEntry.tags = [...currentTags];
+            currentLogEntry.asanas = [...currentAsanas];
+            
+            // Si estamos editando una entrada existente
+            if (editingEntryId !== null) {
+                // Actualizar entrada existente
+                const entryIndex = logHistory.findIndex(entry => entry.id === editingEntryId);
+                if (entryIndex !== -1) {
+                    logHistory[entryIndex] = {...currentLogEntry, id: editingEntryId};
+                }
+                editingEntryId = null;
+            } else {
+                // Crear nueva entrada
+                const newEntry = {
+                    id: Date.now().toString(),
+                    ...currentLogEntry
+                };
+                logHistory.unshift(newEntry);
+            }
+            
+            // Guardar en Supabase
+            try {
+                const { data, error } = await supabase
+                    .from('log_entries')
+                    .upsert([{
+                        id: editingEntryId || currentLogEntry.id || undefined,
+                        date: currentLogEntry.date.toISOString(),
+                        practiced: currentLogEntry.practiced,
+                        moods: currentLogEntry.moods,
+                        notes: currentLogEntry.notes,
+                        tags: currentLogEntry.tags,
+                        asanas: currentLogEntry.asanas
+                    }]);
+                
+                if (error) throw error;
+                
+                console.log('Entrada guardada en Supabase:', data);
+            } catch (error) {
+                console.error('Error al guardar en Supabase:', error);
+            }
+            
+            // Actualizar visualización
+            displayLogHistory();
+            clearCurrentEntry();
+            
+            alert('Entrada guardada correctamente');
+        }
+
+        // Cargar historial desde Supabase
+        async function loadLogHistory() {
+            try {
+                const { data, error } = await supabase
+                    .from('log_entries')
+                    .select('*')
+                    .order('date', { ascending: false });
+                
+                if (error) throw error;
+                
+                if (data) {
+                    logHistory = data.map(entry => ({
+                        ...entry,
+                        date: new Date(entry.date)
+                    }));
+                    displayLogHistory();
+                }
+            } catch (error) {
+                console.error('Error al cargar desde Supabase:', error);
+            }
+        }
+
+        // Mostrar historial de entradas
+        function displayLogHistory() {
+            const logHistoryContainer = document.getElementById('log-history');
+            
+            // Mostrar todas las entradas (sin filtros)
+            let filteredHistory = [...logHistory];
+            
+            // Generar HTML para las entradas
+            if (filteredHistory.length === 0) {
+                logHistoryContainer.innerHTML = '<p style="text-align: center;">No hay entradas en el historial</p>';
+                return;
+            }
+            
+            let historyHTML = '<h3 style="text-align: center; margin-bottom: 15px;">HISTORIAL DE PRÁCTICAS</h3>';
+            
+            filteredHistory.forEach(entry => {
+                // Formatear fecha completa
+                const formattedDate = entry.date.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Botón SÍ/NO
+                const practiceButtonHTML = `
+                    <div class="practice-button ${entry.practiced ? 'yes' : ''}" style="width: 33px; height: 33px; background-color: ${entry.practiced ? 'var(--yellow-accent)' : 'var(--red-accent)'}; border: 2px solid var(--text-dark); border-radius: 25px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <div class="practice-state" style="color: ${entry.practiced ? 'var(--text-light)' : 'var(--text-dark)'}; font-weight: bold;">
+                            ${entry.practiced ? 'SÍ' : 'NO'}
+                        </div>
+                    </div>
+                `;
+                
+                // Moods seleccionados
+                const moodsHTML = entry.moods.map(mood => 
+                    `<div class="log-entry-mood" style="background-color: ${mood.color}">${mood.emoji}</div>`
+                ).join('');
+                
+                const tagsHTML = entry.tags.map(tag => 
+                    `<span class="log-entry-tag">${tag}</span>`
+                ).join('');
+                
+                const asanasHTML = entry.asanas.map(asana => 
+                    `<span class="log-entry-tag">${asana.name}</span>`
+                ).join('');
+                
+                historyHTML += `
+                    <div class="log-entry" data-id="${entry.id}">
+                        <div class="log-entry-header">
+                            <div class="log-entry-date" style="text-transform: capitalize;">${formattedDate}</div>
+                            <div style="display: flex; align-items: center;">
+                                ${practiceButtonHTML}
+                                <div class="log-entry-moods">
+                                    ${moodsHTML}
+                                </div>
+                            </div>
+                        </div>
+                        ${entry.notes ? `<div class="log-entry-notes">${entry.notes}</div>` : ''}
+                        ${tagsHTML ? `<div class="log-entry-tags">${tagsHTML}</div>` : ''}
+                        ${asanasHTML ? `<div class="log-entry-tags">${asanasHTML}</div>` : ''}
+                        <button class="edit-notes-btn" data-id="${entry.id}">Editar</button>
+                    </div>
+                `;
+            });
+            
+            logHistoryContainer.innerHTML = historyHTML;
+            
+            // Añadir event listeners para los botones de edición
+            document.querySelectorAll('.edit-notes-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const entryId = this.getAttribute('data-id');
+                    editLogEntry(entryId);
+                });
+            });
+        }
+
+        // Editar una entrada existente
+        function editLogEntry(entryId) {
+            const entry = logHistory.find(e => e.id === entryId);
+            if (!entry) return;
+            
+            // Cargar datos en el formulario actual
+            editingEntryId = entryId;
+            currentLogEntry = {...entry};
+            
+            // Actualizar UI
+            document.getElementById('practice-button').classList.toggle('yes', entry.practiced);
+            document.querySelector('.practice-state').textContent = entry.practiced ? 'SÍ' : 'NO';
+            
+            // Limpiar y actualizar moods seleccionados
+            selectedMoods = [];
+            document.querySelectorAll('.mood-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Seleccionar moods de la entrada
+            entry.moods.forEach(mood => {
+                const moodIndex = moodOptions.findIndex(m => m.name === mood.name);
+                if (moodIndex !== -1) {
+                    selectedMoods.push(moodIndex);
+                    document.querySelector(`.mood-item[data-index="${moodIndex}"]`).classList.add('selected');
+                }
+            });
+            
+            // Actualizar notas
+            document.getElementById('practice-notes').value = entry.notes || '';
+            
+            // Actualizar tags
+            currentTags = [...entry.tags];
+            updateTagsDisplay();
+            
+            // Actualizar asanas
+            currentAsanas = [...entry.asanas];
+            updateAsanasDisplay();
+            
+            // Desplazar hacia arriba para ver el formulario
+            document.getElementById('log').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Actualizar visualización de tags
+        function updateTagsDisplay() {
+            const tagsList = document.getElementById('tags-list');
+            tagsList.innerHTML = '';
+            
+            currentTags.forEach((tag, index) => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.textContent = tag;
+                
+                const removeBtn = document.createElement('span');
+                removeBtn.innerHTML = ' &times;';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.marginLeft = '5px';
+                removeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    currentTags.splice(index, 1);
+                    updateTagsDisplay();
+                });
+                
+                tagElement.appendChild(removeBtn);
+                tagsList.appendChild(tagElement);
+            });
+        }
+
+        // Limpiar entrada actual
+        function clearCurrentEntry() {
+            // Restablecer práctica
+            document.getElementById('practice-button').classList.remove('yes');
+            document.querySelector('.practice-state').textContent = 'NO';
+            currentLogEntry.practiced = false;
+            
+            // Limpiar moods
+            selectedMoods = [];
+            document.querySelectorAll('.mood-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            currentLogEntry.moods = [];
+            
+            // Limpiar notas
+            document.getElementById('practice-notes').value = '';
+            currentLogEntry.notes = '';
+            
+            // Limpiar tags
+            currentTags = [];
+            updateTagsDisplay();
+            currentLogEntry.tags = [];
+            
+            // Limpiar asanas
+            currentAsanas = [];
+            updateAsanasDisplay();
+            currentLogEntry.asanas = [];
+            
+            // Restablecer fecha
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            document.getElementById('current-date').textContent = `HOY: ${formattedDate}`;
+            
+            // Limpiar ID de edición
+            editingEntryId = null;
+        }
+    </script>
+</body>
+</html>
