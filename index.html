@@ -435,7 +435,7 @@
             margin: 15px;
             padding: 15px;
             background: rgba(153, 143, 118, 0.4);
-            border: 3px solid #33333360;
+            border: 1px solid #333333;
         }
 
         .log-entry-header {
@@ -763,16 +763,6 @@
     text-align: left;
 }
 
-/* Para pantallas muy pequeñas, ajustar aún más */
-@media (max-width: 480px) {
-    .app-container {
-        padding-bottom: 75px; /* Un poco más de espacio en móviles muy pequeños */
-    }
-    
-    .content {
-        padding-bottom: 15px;
-    }
-}
 
 
 
@@ -1268,9 +1258,9 @@
                                 ${moodsHTML}
                             </div>
                         </div>
-                        ${entry.notes ? `<div class="log-entry-notes">${entry.notes}</div>` : ''}
                         ${tagsHTML ? `<div class="log-entry-tags">${tagsHTML}</div>` : ''}
                         ${asanasHTML ? `<div class="log-entry-tags">${asanasHTML}</div>` : ''}
+                        ${entry.notes ? `<div class="log-entry-notes">${entry.notes}</div>` : ''}
                         <button class="delete-entry-btn" data-id="${entry.id}">Eliminar</button>
                     </div>
                 `;
