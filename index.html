@@ -769,6 +769,10 @@
         padding-bottom: 15px;
     }
 }
+
+
+
+
     </style>
 </head>
 
@@ -942,12 +946,13 @@
             { name: 'cansancio', label: 'Mood: siesta', emoji: '<i class="fa-solid fa-face-tired"></i>', color: '#bc4749' },
             { name: 'relajado', label: 'Mood: ohmmm', emoji: '<i class="fa-solid fa-heart"></i>', color: '#FF9A76' },
             { name: 'energico', label: 'Mood: estoy para doblete', emoji: '<i class="fa-solid fa-bolt-lightning"></i>', color: '#95E1D3' },
-            { name: 'inconclusa', label: 'Práctica Inconmpleta', emoji: '<i class="fa-solid fa-xmark"></i>', color: '#bc6c25' },
             { name: 'complete', label: 'Práctica Completa', emoji: '<i class="fa-solid fa-check"></i>', color: '#81b29a' },
+            { name: 'inconclusa', label: 'Práctica Inconmpleta', emoji: '<i class="fa-solid fa-xmark"></i>', color: '#bc6c25' },
             { name: 'primera', label: 'Primera Serie', emoji: '<i class="fa-solid fa-1"></i>', color: '#da627d' },
             { name: 'segunda', label: 'Segunda Serie', emoji: '<i class="fa-solid fa-2"></i>', color: '#ffa5ab' },
-            { name: 'moon day', label: 'Moon Day', emoji: '<i class="fa-solid fa-moon"></i>', color: '#ffa5ab' },
-            { name: 'quote', label: 'quote', emoji: '<i class="fa-solid fa-quote-right"></i>', color: '#ffa5ab' },
+            { name: 'otro estilo', label: 'vinyasa', emoji: '<i class="fa-solid fa-fire"></i>', color: '#a26769' },
+            { name: 'moon day', label: 'Moon Day', emoji: '<i class="fa-solid fa-moon"></i>', color: '#ced4da' },
+            { name: 'quote', label: 'quote', emoji: '<i class="fa-solid fa-quote-right"></i>', color: '#6d597a' },
             ];
 
         // Datos de ejemplo para asanas
@@ -1206,85 +1211,6 @@
             });
         }
 
-        // Guardar entrada de bitácora
-        async function saveLogEntry() {
-            // Obtener fecha del campo de entrada o usar la actual
-            const dateInput = document.getElementById('practice-date').value;
-            let entryDate;
-            
-            if (dateInput) {
-                entryDate = new Date(dateInput);
-            } else {
-                entryDate = new Date();
-            }
-            
-            // Actualizar datos de la entrada actual
-            currentLogEntry.date = entryDate;
-            currentLogEntry.notes = document.getElementById('practice-notes').value;
-            currentLogEntry.tags = [...currentTags];
-            currentLogEntry.asanas = [...currentAsanas];
-            
-            // Guardar en Supabase
-            try {
-                const entryData = {
-                    date: currentLogEntry.date.toISOString(),
-                    practiced: currentLogEntry.practiced,
-                    moods: currentLogEntry.moods,
-                    notes: currentLogEntry.notes,
-                    tags: currentLogEntry.tags,
-                    asanas: currentLogEntry.asanas
-                };
-                
-                const { data, error } = await supabase
-                    .from('log_entries')
-                    .upsert([entryData]);
-
-                if (error) throw error;
-                
-                console.log('Entrada guardada en Supabase:', data);
-                
-                // Crear nueva entrada
-                const newEntry = {
-                    id: Date.now().toString(),
-                    ...currentLogEntry
-                };
-                logHistory.unshift(newEntry);
-                
-                // Actualizar visualización
-                displayLogHistory();
-                updateStatistics();
-                clearCurrentEntry();
-                
-                alert('Entrada guardada correctamente');
-                
-            } catch (error) {
-                console.error('Error al guardar en Supabase:', error);
-                alert('Error al guardar: ' + error.message);
-            }
-        }
-
-        // Cargar historial desde Supabase
-        async function loadLogHistory() {
-            try {
-                const { data, error } = await supabase
-                    .from('log_entries')
-                    .select('*')
-                    .order('date', { ascending: false });
-                
-                if (error) throw error;
-                
-                if (data) {
-                    logHistory = data.map(entry => ({
-                        ...entry,
-                        date: new Date(entry.date)
-                    }));
-                    displayLogHistory();
-                    updateStatistics();
-                }
-            } catch (error) {
-                console.error('Error al cargar desde Supabase:', error);
-            }
-        }
 
         // Mostrar historial de entradas
         function displayLogHistory() {
@@ -1384,67 +1310,218 @@
                 alert('Error al eliminar: ' + error.message);
             }
         }
-        // Actualizar estadísticas
-        function updateStatistics() {
-            const today = new Date();
-            const statsSummary = document.getElementById('stats-summary');
-            const statsChart = document.getElementById('stats-chart');
-            
-            // Filtrar entradas desde el 1/11/2025
-            const filteredEntries = logHistory.filter(entry => 
-                entry.date >= startDate && entry.practiced
-            );
-            
-            // Calcular días desde el 1/11/2025 hasta hoy
-            const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            
-            // Calcular estadísticas
-            const practiceCount = filteredEntries.length;
-            const practiceRatio = daysSinceStart > 0 ? (practiceCount / daysSinceStart) * 100 : 0;
-            
-            // Actualizar resumen
-            statsSummary.innerHTML = `
+
+// Guardar entrada de bitácora
+async function saveLogEntry() {
+    // Obtener fecha del campo de entrada o usar la actual
+    const dateInput = document.getElementById('practice-date').value;
+    let entryDate;
+    
+    if (dateInput) {
+        // Crear fecha sin problemas de huso horario
+        const [year, month, day] = dateInput.split('-');
+        entryDate = new Date(year, month - 1, day); // month - 1 porque los meses en JS son 0-indexed
+    } else {
+        // Usar fecha actual, pero normalizada a medianoche para evitar problemas
+        const now = new Date();
+        entryDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+    
+    // Actualizar datos de la entrada actual
+    currentLogEntry.date = entryDate;
+    currentLogEntry.notes = document.getElementById('practice-notes').value;
+    currentLogEntry.tags = [...currentTags];
+    currentLogEntry.asanas = [...currentAsanas];
+    
+    // Guardar en Supabase
+    try {
+        const entryData = {
+            date: currentLogEntry.date.toISOString(),
+            practiced: currentLogEntry.practiced,
+            moods: currentLogEntry.moods,
+            notes: currentLogEntry.notes,
+            tags: currentLogEntry.tags,
+            asanas: currentLogEntry.asanas
+        };
+        
+        const { data, error } = await supabase
+            .from('log_entries')
+            .upsert([entryData]);
+
+        if (error) throw error;
+        
+        console.log('Entrada guardada en Supabase:', data);
+        
+        // Crear nueva entrada
+        const newEntry = {
+            id: Date.now().toString(),
+            ...currentLogEntry
+        };
+        logHistory.unshift(newEntry);
+        
+        // Actualizar visualización
+        displayLogHistory();
+        updateStatistics();
+        clearCurrentEntry();
+        
+        alert('Entrada guardada correctamente');
+        
+    } catch (error) {
+        console.error('Error al guardar en Supabase:', error);
+        alert('Error al guardar: ' + error.message);
+    }
+}
+
+// Cargar historial desde Supabase
+async function loadLogHistory() {
+    try {
+        const { data, error } = await supabase
+            .from('log_entries')
+            .select('*')
+            .order('date', { ascending: false });
+        
+        if (error) throw error;
+        
+        if (data) {
+            logHistory = data.map(entry => {
+                // Crear fecha sin problemas de huso horario
+                const dateFromDB = new Date(entry.date);
+                const normalizedDate = new Date(
+                    dateFromDB.getFullYear(),
+                    dateFromDB.getMonth(),
+                    dateFromDB.getDate()
+                );
                 
-                <strong>${practiceCount}/${daysSinceStart} días de práctica - ${practiceRatio.toFixed(1)}%</strong>
-                <br><i><div style="font-size: 0.8rem; color: #333;">desde 1/11/2025</div>
-            `;
-            
-            // Generar datos para el gráfico (frecuencia de moods)
-            const moodFrequencyData = getMoodFrequencyData();
-            
-            // Limpiar gráfico
-            statsChart.innerHTML = '';
-            
-            // Crear barras del gráfico
-            moodFrequencyData.forEach(data => {
-                const maxFrequency = Math.max(...moodFrequencyData.map(d => d.count));
-                const barHeight = maxFrequency > 0 ? (data.count / maxFrequency) * 100 : 0;
-                
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                bar.style.height = `${barHeight}%`;
-                bar.style.backgroundColor = data.color;
-                
-                const value = document.createElement('div');
-                value.className = 'chart-value';
-                value.textContent = data.count;
-                
-                const label = document.createElement('div');
-                label.className = 'chart-label';
-                
-                // Crear el círculo con el emoji y color de fondo
-                const moodCircle = document.createElement('div');
-                moodCircle.className = 'chart-mood-circle';
-                moodCircle.innerHTML = data.emoji; // Usar innerHTML para renderizar el icono FontAwesome
-                moodCircle.style.backgroundColor = data.color;
-                moodCircle.title = data.label; // Tooltip con el nombre completo
-                
-                label.appendChild(moodCircle);
-                bar.appendChild(value);
-                bar.appendChild(label);
-                statsChart.appendChild(bar);
+                return {
+                    ...entry,
+                    date: normalizedDate
+                };
             });
+            displayLogHistory();
+            updateStatistics();
         }
+    } catch (error) {
+        console.error('Error al cargar desde Supabase:', error);
+    }
+}
+
+// Actualizar estadísticas
+function updateStatistics() {
+    const today = new Date();
+    const statsSummary = document.getElementById('stats-summary');
+    const statsChart = document.getElementById('stats-chart');
+    
+    // Normalizar fecha de hoy a medianoche para comparaciones
+    const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    
+    // Filtrar entradas desde el 1/11/2025 que sean días laborables (lunes a viernes)
+    const filteredEntries = logHistory.filter(entry => {
+        const dayOfWeek = entry.date.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+        const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5; // lunes a viernes
+        return entry.date >= startDate && entry.practiced && isWeekday;
+    });
+    
+    // Calcular días laborables desde el 1/11/2025 hasta hoy
+    let weekdaysSinceStart = 0;
+    let currentDate = new Date(startDate);
+    
+    while (currentDate <= normalizedToday) {
+        const dayOfWeek = currentDate.getDay();
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) { // lunes a viernes
+            weekdaysSinceStart++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    // Calcular estadísticas
+    const practiceCount = filteredEntries.length;
+    const practiceRatio = weekdaysSinceStart > 0 ? (practiceCount / weekdaysSinceStart) * 100 : 0;
+    
+    // Actualizar resumen
+    statsSummary.innerHTML = `
+        <strong>${practiceCount}/${weekdaysSinceStart} días de práctica - ${practiceRatio.toFixed(1)}%</strong>
+        <br><i><div style="font-size: 0.8rem; color: #333;">desde 1/11/2025 (solo días laborables)</div>
+    `;
+    
+    // Generar datos para el gráfico (frecuencia de moods)
+    const moodFrequencyData = getMoodFrequencyData();
+    
+    // Limpiar gráfico
+    statsChart.innerHTML = '';
+    
+    // Crear barras del gráfico
+    moodFrequencyData.forEach(data => {
+        const maxFrequency = Math.max(...moodFrequencyData.map(d => d.count));
+        const barHeight = maxFrequency > 0 ? (data.count / maxFrequency) * 100 : 0;
+        
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.height = `${barHeight}%`;
+        bar.style.backgroundColor = data.color;
+        
+        const value = document.createElement('div');
+        value.className = 'chart-value';
+        value.textContent = data.count;
+        
+        const label = document.createElement('div');
+        label.className = 'chart-label';
+        
+        // Crear el círculo con el emoji y color de fondo
+        const moodCircle = document.createElement('div');
+        moodCircle.className = 'chart-mood-circle';
+        moodCircle.innerHTML = data.emoji;
+        moodCircle.style.backgroundColor = data.color;
+        moodCircle.title = data.label;
+        
+        label.appendChild(moodCircle);
+        bar.appendChild(value);
+        bar.appendChild(label);
+        statsChart.appendChild(bar);
+    });
+}
+
+// Limpiar entrada actual
+function clearCurrentEntry() {
+    // Restablecer práctica
+    document.getElementById('practice-button').classList.remove('yes');
+    document.querySelector('.practice-state').textContent = 'NO';
+    currentLogEntry.practiced = false;
+    
+    // Limpiar moods
+    selectedMoods = [];
+    document.querySelectorAll('.mood-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+    currentLogEntry.moods = [];
+    
+    // Limpiar fecha (establecer a hoy) - normalizada
+    const now = new Date();
+    const normalizedNow = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    document.getElementById('practice-date').valueAsDate = normalizedNow;
+    
+    // Limpiar notas
+    document.getElementById('practice-notes').value = '';
+    currentLogEntry.notes = '';
+    
+    // Limpiar tags
+    currentTags = [];
+    updateTagsDisplay();
+    currentLogEntry.tags = [];
+    
+    // Limpiar asanas
+    currentAsanas = [];
+    updateAsanasDisplay();
+    currentLogEntry.asanas = [];
+    
+    // Restablecer fecha en el header
+    const formattedDate = normalizedNow.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+    document.getElementById('current-date').textContent = `${formattedDate}`;
+}
+
 
         // Obtener frecuencia de moods
         function getMoodFrequencyData() {
