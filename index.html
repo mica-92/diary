@@ -121,13 +121,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: var(--primary-color);
+            background-color: #6d765f;
             border-top: 3px solid var(--text-dark);
             z-index: 1000;
             height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: 8px;
         }
 
         .nav-menu {
@@ -138,7 +139,7 @@
 
         .nav-btn {
             flex: 1;
-            background: var(--primary-color);
+            background: #6d765f;
             border: none;
             border-right: 1px solid var(--text-dark);
             color: var(--text-dark);
@@ -761,13 +762,12 @@
 
 /* Para pantallas muy pequeñas, ajustar aún más */
 @media (max-width: 480px) {
-    .log-history {
-        padding-bottom: 12px;
-        margin-bottom: 75px !important; /* Un poco más de espacio en móviles muy pequeños */
+    .app-container {
+        padding-bottom: 75px; /* Un poco más de espacio en móviles muy pequeños */
     }
     
     .content {
-        padding-bottom: 15px !important;
+        padding-bottom: 15px;
     }
 }
 
@@ -1626,4 +1626,3 @@ function clearCurrentEntry() {
     </script>
 </body>
 </html>
-
