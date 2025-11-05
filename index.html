@@ -42,25 +42,38 @@
             box-sizing: border-box;
             font-family: "Inconsolata", monospace;
         }
-/* Header fijo */
-header {
-    padding: 15px 20px;
-    color: var(--bck);
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.5rem;
-    border-bottom: 3px solid var(--text-dark);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    height: 60px;
+
+        .chart-mood-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--text-dark);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--accent-color);
+    margin: 0 auto;
+    font-size: 0.9rem;
 }
+
+        /* Header fijo */
+        header {
+            padding: 8px 20px;
+            color: var(--bck);
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 3px solid var(--text-dark);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent-color);
+        }
+
         html, body {
             height: 100%;
             overflow: hidden;
@@ -193,8 +206,8 @@ header {
         }
 
         .header-btn {
-            width: 44px;
-            height: 44px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             border: 2px solid var(--text-dark);
             background: var(--log-accent);
@@ -203,7 +216,7 @@ header {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
@@ -212,88 +225,38 @@ header {
             color: var(--text-dark);
         }
 
-        /* PRACTICASTE HOY SECCION */
-        .practice-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .practice-button {
-            display: inline-block;
-            width: 33px;
-            height: 33px;
-            background-color: var(--red-accent);
-            border: 3px solid var(--text-dark);
-            border-radius: 25px;
-            cursor: pointer;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .practice-state {
-            font-weight: bold;
-            color: var(--text-dark);
-            transition: all 0.3s ease;
-        }
-
-        .practice-button.yes {
-            background-color: var(--accent-color);
-        }
-
-        .practice-button.yes .practice-state {
-            color: var(--text-light);
-        }
-
-        /* MOOD SECTION - NUEVO DISEÑO UNIFICADO */
-        .mood-section {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 2px solid #333;
-        }
-
-        .mood-board {
-            display: flex;
-            gap: 10px;
-            margin: 0;
-            justify-content: flex-end;
-            flex: 1;
-        }
-
-        .mood-item {
-            width: 33px;
-            height: 33px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            border: 2px solid var(--text-dark);
-            border-radius: 50%;
-            background-color: #ccc;
-        }
-
-        .mood-item.selected {
-            transform: scale(1.1);
-            filter: hue-rotate(90deg);
-            color: #505749;
-        }
+        /* SECCION */
 
         .detail-label {
             text-align: center;
-            margin-bottom: 8px;
+            padding: 6px;
             font-weight: bold;
+            border-bottom: 2px solid #33333380;
         }
 
         .notes-section {
             padding: 12px;
             border-bottom: 2px solid #333;
+        }
+
+        .date-input-container {
+            margin-bottom: 15px;
+        }
+
+        .date-input-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .date-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid var(--text-dark);
+            background: rgba(233, 165, 106, 0.4);
+            color: var(--text-dark);
+            font-family: "Inconsolata", monospace;
         }
 
         .notes-textarea {
@@ -316,6 +279,7 @@ header {
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
+            margin-top: 12px;
         }
 
         .tag-input {
@@ -335,8 +299,8 @@ header {
             font-weight: bold;
             text-transform: uppercase;
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -396,8 +360,8 @@ header {
             font-weight: bold;
             text-transform: uppercase;
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -450,29 +414,39 @@ header {
         }
 
         .log-history {
+            margin-top: 12px;
+            border-top: 2px solid #333;
+            background-color: #515b4470;
+            
+        }
+
+        .log-history h3 {
             padding: 12px;
+            background: rgb(188, 71, 73); 
+            text-align: left;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #333;
         }
 
         .log-entry {
-            border: 2px solid var(--accent-color);
-            margin-bottom: 15px;
+            margin: 15px;
             padding: 15px;
-            background: #515b4470;
-            border-left: 10px solid var(--accent-color);
+            background: rgba(153, 143, 118, 0.4);
+            border: 3px solid #33333360;
         }
 
         .log-entry-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
             margin-bottom: 10px;
-            border-bottom: 1px solid var(--text-dark);
             padding-bottom: 5px;
         }
 
         .log-entry-date {
             font-weight: bold;
             text-transform: capitalize;
+            width: 100%;
         }
 
         .log-entry-moods {
@@ -482,8 +456,8 @@ header {
         }
 
         .log-entry-mood {
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             border: 1px solid var(--text-dark);
             display: flex;
@@ -509,12 +483,12 @@ header {
         .log-entry-notes {
             margin: 10px 0;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.5);
-            border-left: 3px solid var(--log-accent);
-        }
+            background: rgba(255, 255, 255, 0.3);
+                }
 
-        .edit-notes-btn {
-            background: var(--log-accent);
+        /* Botón de eliminar */
+        .delete-entry-btn {
+            background: var(--red-accent);
             color: white;
             border: 2px solid var(--text-dark);
             padding: 5px 10px;
@@ -525,76 +499,283 @@ header {
             margin-top: 10px;
         }
 
-        .edit-notes-btn:hover {
-            background: var(--yellow-accent);
+        .delete-entry-btn:hover {
+            background: #d63031;
             color: var(--text-dark);
         }
 
-        /* Estilos para pantallas grandes */
-        @media (min-width: 768px) {
-            .mood-section {
-                flex-direction: row;
-                align-items: center;
-            }
-
-            .practice-toggle {
-                width: 30%;
-                text-align: left;
-                justify-content: flex-start;
-                padding-right: 0;
-            }
-
-            .mood-board {
-                width: 70%;
-                justify-content: flex-end;
-            }
+        /* MOOD SECTION - BOTÓN DE PRÁCTICA COMO UN MOOD MÁS */
+        .mood-section {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 2px solid #33333380;
+            gap: 10px;
         }
 
-        /* Estilos para pantallas pequeñas */
+        .practice-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .practice-button {
+            width: 33px;
+            height: 33px;
+            background-color: var(--red-accent);
+            border: 2px solid var(--text-dark);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .practice-state {
+            font-weight: bold;
+            color: var(--text-dark);
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .practice-button.yes {
+            background-color: var(--accent-color);
+        }
+
+        .practice-button.yes .practice-state {
+            color: var(--text-light);
+        }
+
+        .mood-board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .mood-item {
+            width: 33px;
+            height: 33px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--text-dark);
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+
+        .mood-item.selected {
+            transform: scale(1.1);
+            filter: hue-rotate(90deg);
+            color: #505749;
+        }
+
+        /* Para el historial - mismo estilo */
+        .log-entry-practice {
+            width: 30px;
+            height: 30px;
+            background-color: var(--red-accent);
+            border: 2px solid var(--text-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .log-entry-practice.yes {
+            background-color: var(--accent-color);
+        }
+
+        .log-entry-practice .practice-state {
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .log-entry-practice.yes .practice-state {
+            color: var(--text-light);
+        }
+
+        .log-entry-moods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            max-width: 100%;
+        }
+
+        /* Para pantallas pequeñas */
         @media (max-width: 767px) {
-            .log-header {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .header-actions {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .practice-toggle {
-                width: 100%;
-                justify-content: space-between;
-            }
-
             .mood-section {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .practice-toggle {
+                order: -1; /* Poner primero */
+            }
+            
+            .mood-board {
+                justify-content: flex-start;
             }
 
-            .mood-board {
-                width: 100%;
-                justify-content: center;
+            header {
+                font-size: 0.8rem !important;
             }
         }
+
+        @media (max-width: 480px) {
+            .mood-board {
+                gap: 4px;
+            }
+            
+            .mood-item, .practice-button {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .practice-state {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Indicador de modo edición */
+        .log-header.editing::before {
+            content: "EDITANDO ENTRADA EXISTENTE";
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--yellow-accent);
+            color: var(--text-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 2px solid var(--text-dark);
+            z-index: 100;
+        }
+
+        .log-header {
+            position: relative;
+        }
+
+        .save-log-btn.editing {
+            background: var(--yellow-accent) !important;
+            color: var(--text-dark) !important;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* ESTADÍSTICAS */
+        .stats-section {
+            background: #515b4470;
+            margin-top: 10px
+        }
+
+        .stats-title {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            background: rgb(188, 71, 73);
+            padding: 12px;
+            border-top: 2px solid #333;
+            border-bottom: 2px solid #333;
+
+        }
+
+        .stats-summary {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .stats-chart {
+            width: 100%;
+            height: 250px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 5px;
+            padding: 10px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #333;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--accent-color);
+            border: 1px solid var(--text-dark);
+            position: relative;
+            min-height: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            background: var(--yellow-accent);
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-dark);
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .log-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    flex: 1;
+    text-align: left;
+}
     </style>
 </head>
 
 <body>
     <header>
-        dainandinī
+        <div style="font-size: 1.1rem;">Dainandinī</div>
+        <div style="font-size: 0.9rem;"><br>una bitácora para la práctica del yoga</div>
     </header>
     
     <div class="app-container">
         <div class="content">
             <main>
+                <div class="detail-label" style="background: rgb(233, 196, 106);">desarrollado por una ashtangui</div>                      
+
                 <!-- Nueva sección Bitácora -->
-                <section id="log" class="section active">
-                    <div class="log-container">
-                        <!-- HEADER CON FECHA Y BOTONES CIRCULARES -->
-                        <div class="log-header">
-                            <div class="log-date" id="current-date">DD/MM/YYYY</div>
+                <section id="log" class="section active" style="margin:10px; ">
+                    <div class="log-container" style="border: 2px solid #333">
+                        <div class="log-header" style="background: rgb(188, 71, 73)">
+                            <div class="log-date" id="current-date" style="display: none;">DD/MM/YYYY</div>
+                            <div class="log-title">NUEVO Registro</div>
                             <div class="header-actions">
                                 <button class="header-btn" id="save-log-btn" title="Guardar">
                                     <i class="fa-solid fa-floppy-disk"></i>
@@ -605,23 +786,25 @@ header {
                             </div>
                         </div>
                         
-                        <!-- SECCIÓN PRACTICASTE HOY Y MOOD BOARD -->
-                        <div class="mood-section">
+                        <div class="mood-section" style="background: #33333330;">
                             <div class="practice-toggle">
-                                <span>PRACTICASTE HOY:</span>
                                 <div class="practice-button" id="practice-button">
                                     <div class="practice-state">NO</div>
                                 </div>
                             </div>
-                            
                             <div class="mood-board" id="mood-board">
                                 <!-- Los elementos del mood board se generarán con JavaScript -->
                             </div>
                         </div>
 
                         <!-- SECCIÓN NOTAS -->
-                        <div class="notes-section">
-                            <div class="detail-label">NOTAS DE LA PRÁCTICA:</div>
+                        <div class="notes-section" style="background: #33333330;">
+                            <div class="date-input-container">
+                                <label class="date-input-label" for="practice-date">FECHA DE LA PRÁCTICA:</label>
+                                <input type="date" class="date-input" id="practice-date">
+                                <small style="color: #666; font-size: 0.8rem;">Si está vacío, se usará la fecha actual</small>
+                            </div>
+                            
                             <textarea class="notes-textarea" id="practice-notes" placeholder="Escribe tus notas aquí..."></textarea>
 
                             <div class="tags-input">
@@ -644,9 +827,20 @@ header {
                             </div>
                         </div>
                         
+                        <!-- ESTADÍSTICAS -->
+                        <div class="stats-section">
+                            <div class="stats-title">ESTADÍSTICAS la práctica</div>
+                            <div class="stats-summary" id="stats-summary">
+                                <!-- Las estadísticas se mostrarán aquí -->
+                            </div>
+                            <div class="stats-chart" id="stats-chart">
+                                <!-- El gráfico se generará aquí -->
+                            </div>
+                        </div>
+                        
                         <!-- HISTORIAL -->
                         <div class="log-history" id="log-history">
-                            <h3 style="text-align: center; margin-bottom: 15px;">HISTORIAL DE PRÁCTICAS</h3>
+                            <h3>REGISTRO de prácticas</h3>
                             <!-- Las entradas anteriores se mostrarán aquí -->
                         </div>
                     </div>
@@ -729,21 +923,18 @@ header {
         // Inicializar cliente de Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Configuración de los estados de ánimo
-        const moodOptions = [
-            { name: 'feliz', label: 'Feliz', emoji: '<i class="fa-solid fa-face-laugh-beam"></i>', color: '#2a9d8f' },
-            { name: 'enojado', label: 'Meh', emoji: '<i class="fa-solid fa-face-meh"></i>', color: '#e9c46a' },
-            { name: 'cansancio', label: 'Cansada', emoji: '<i class="fa-solid fa-face-tired"></i>', color: '#bc4749' },
-            { name: 'relajado', label: 'Relajada', emoji: '<i class="fa-solid fa-heart"></i>', color: '#FF9A76' },
-            { name: 'energico', label: 'Energica', emoji: '<i class="fa-solid fa-bolt-lightning"></i>', color: '#95E1D3' },
-            { name: 'inconclusa', label: 'Inconclusa', emoji: '<i class="fa-solid fa-xmark"></i>', color: '#bc6c25' },
-            { name: 'complete', label: 'Completa', emoji: '<i class="fa-solid fa-check"></i>', color: '#81b29a' },
-
-            { name: 'primera', label: 'Primera', emoji: '<i class="fa-solid fa-1"></i>', color: '#da627d' },
-            { name: 'segunda', label: 'Segunda', emoji: '<i class="fa-solid fa-2"></i>', color: '#ffa5ab' },
-
-
-
+          const moodOptions = [
+            { name: 'feliz', label: 'Mood: YEaYy!!', emoji: '<i class="fa-solid fa-face-laugh-beam"></i>', color: '#2a9d8f' },
+            { name: 'enojado', label: 'Mood: Ehhh... hubo días mejores', emoji: '<i class="fa-solid fa-face-meh"></i>', color: '#e9c46a' },
+            { name: 'cansancio', label: 'Mood: siesta', emoji: '<i class="fa-solid fa-face-tired"></i>', color: '#bc4749' },
+            { name: 'relajado', label: 'Mood: ohmmm', emoji: '<i class="fa-solid fa-heart"></i>', color: '#FF9A76' },
+            { name: 'energico', label: 'Mood: estoy para doblete', emoji: '<i class="fa-solid fa-bolt-lightning"></i>', color: '#95E1D3' },
+            { name: 'inconclusa', label: 'Práctica Inconmpleta', emoji: '<i class="fa-solid fa-xmark"></i>', color: '#bc6c25' },
+            { name: 'complete', label: 'Práctica Completa', emoji: '<i class="fa-solid fa-check"></i>', color: '#81b29a' },
+            { name: 'primera', label: 'Primera Serie', emoji: '<i class="fa-solid fa-1"></i>', color: '#da627d' },
+            { name: 'segunda', label: 'Segunda Serie', emoji: '<i class="fa-solid fa-2"></i>', color: '#ffa5ab' },
+            { name: 'moon day', label: 'Moon Day', emoji: '<i class="fa-solid fa-moon"></i>', color: '#ffa5ab' },
+            { name: 'quote', label: 'quote', emoji: '<i class="fa-solid fa-quote-right"></i>', color: '#ffa5ab' },
             ];
 
         // Datos de ejemplo para asanas
@@ -769,7 +960,9 @@ header {
         let selectedMoods = [];
         let currentTags = [];
         let currentAsanas = [];
-        let editingEntryId = null;
+
+        // Fecha de inicio para estadísticas (1/11/2025)
+        const startDate = new Date(2025, 10, 1); // Noviembre es 10 (0-indexed)
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -788,7 +981,10 @@ header {
                 month: '2-digit',
                 year: 'numeric'
             });
-            document.getElementById('current-date').textContent = `HOY: ${formattedDate}`;
+            document.getElementById('current-date').textContent = `${formattedDate}`;
+            
+            // Establecer fecha actual como valor por defecto en el campo de fecha
+            document.getElementById('practice-date').valueAsDate = now;
             
             // Inicializar mood board
             initializeMoodBoard();
@@ -858,21 +1054,19 @@ header {
                 );
                 
                 // Mostrar resultados
-                displayAsanaSearchResults(filteredAsanas);
+                displayAsanaSearchResults(filteredAsanas, searchResults);
             });
         }
 
         // Mostrar resultados de búsqueda de asanas
-        function displayAsanaSearchResults(asanas) {
-            const searchResults = document.getElementById('asana-search-results');
-            
+        function displayAsanaSearchResults(asanas, container) {
             if (asanas.length === 0) {
-                searchResults.innerHTML = '<div class="asana-search-result">No se encontraron āsanas</div>';
-                searchResults.style.display = 'block';
+                container.innerHTML = '<div class="asana-search-result">No se encontraron āsanas</div>';
+                container.style.display = 'block';
                 return;
             }
             
-            searchResults.innerHTML = '';
+            container.innerHTML = '';
             
             asanas.forEach(asana => {
                 const result = document.createElement('div');
@@ -885,13 +1079,13 @@ header {
                 result.addEventListener('click', function() {
                     addAsanaToLog(asana);
                     document.getElementById('asana-search-input').value = '';
-                    searchResults.style.display = 'none';
+                    container.style.display = 'none';
                 });
                 
-                searchResults.appendChild(result);
+                container.appendChild(result);
             });
             
-            searchResults.style.display = 'block';
+            container.style.display = 'block';
         }
 
         // Añadir asana a la entrada actual
@@ -1001,54 +1195,59 @@ header {
 
         // Guardar entrada de bitácora
         async function saveLogEntry() {
+            // Obtener fecha del campo de entrada o usar la actual
+            const dateInput = document.getElementById('practice-date').value;
+            let entryDate;
+            
+            if (dateInput) {
+                entryDate = new Date(dateInput);
+            } else {
+                entryDate = new Date();
+            }
+            
             // Actualizar datos de la entrada actual
-            currentLogEntry.date = new Date();
+            currentLogEntry.date = entryDate;
             currentLogEntry.notes = document.getElementById('practice-notes').value;
             currentLogEntry.tags = [...currentTags];
             currentLogEntry.asanas = [...currentAsanas];
             
-            // Si estamos editando una entrada existente
-            if (editingEntryId !== null) {
-                // Actualizar entrada existente
-                const entryIndex = logHistory.findIndex(entry => entry.id === editingEntryId);
-                if (entryIndex !== -1) {
-                    logHistory[entryIndex] = {...currentLogEntry, id: editingEntryId};
-                }
-                editingEntryId = null;
-            } else {
+            // Guardar en Supabase
+            try {
+                const entryData = {
+                    date: currentLogEntry.date.toISOString(),
+                    practiced: currentLogEntry.practiced,
+                    moods: currentLogEntry.moods,
+                    notes: currentLogEntry.notes,
+                    tags: currentLogEntry.tags,
+                    asanas: currentLogEntry.asanas
+                };
+                
+                const { data, error } = await supabase
+                    .from('log_entries')
+                    .upsert([entryData]);
+
+                if (error) throw error;
+                
+                console.log('Entrada guardada en Supabase:', data);
+                
                 // Crear nueva entrada
                 const newEntry = {
                     id: Date.now().toString(),
                     ...currentLogEntry
                 };
                 logHistory.unshift(newEntry);
-            }
-            
-            // Guardar en Supabase
-            try {
-                const { data, error } = await supabase
-                    .from('log_entries')
-                    .upsert([{
-                        date: currentLogEntry.date.toISOString(),
-                        practiced: currentLogEntry.practiced,
-                        moods: currentLogEntry.moods,
-                        notes: currentLogEntry.notes,
-                        tags: currentLogEntry.tags,
-                        asanas: currentLogEntry.asanas
-                    }]);
                 
-                if (error) throw error;
+                // Actualizar visualización
+                displayLogHistory();
+                updateStatistics();
+                clearCurrentEntry();
                 
-                console.log('Entrada guardada en Supabase:', data);
+                alert('Entrada guardada correctamente');
+                
             } catch (error) {
                 console.error('Error al guardar en Supabase:', error);
+                alert('Error al guardar: ' + error.message);
             }
-            
-            // Actualizar visualización
-            displayLogHistory();
-            clearCurrentEntry();
-            
-            alert('Entrada guardada correctamente');
         }
 
         // Cargar historial desde Supabase
@@ -1067,6 +1266,7 @@ header {
                         date: new Date(entry.date)
                     }));
                     displayLogHistory();
+                    updateStatistics();
                 }
             } catch (error) {
                 console.error('Error al cargar desde Supabase:', error);
@@ -1086,23 +1286,20 @@ header {
                 return;
             }
             
-            let historyHTML = '<h3 style="text-align: center; margin-bottom: 15px;">HISTORIAL DE PRÁCTICAS</h3>';
+            let historyHTML = '<h3>HISTORIAL de prácticas</h3>';
             
             filteredHistory.forEach(entry => {
                 // Formatear fecha completa
                 const formattedDate = entry.date.toLocaleDateString('es-ES', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
                 });
                 
-                // Botón SÍ/NO
+                // Botón SÍ/NO como un mood más
                 const practiceButtonHTML = `
-                    <div class="practice-button ${entry.practiced ? 'yes' : ''}" style="width: 33px; height: 33px; background-color: ${entry.practiced ? 'var(--yellow-accent)' : 'var(--red-accent)'}; border: 2px solid var(--text-dark); border-radius: 25px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                        <div class="practice-state" style="color: ${entry.practiced ? 'var(--text-light)' : 'var(--text-dark)'}; font-weight: bold;">
-                            ${entry.practiced ? 'SÍ' : 'NO'}
-                        </div>
+                    <div class="log-entry-practice ${entry.practiced ? 'yes' : ''}">
+                        <div class="practice-state">${entry.practiced ? 'SÍ' : 'NO'}</div>
                     </div>
                 `;
                 
@@ -1122,75 +1319,153 @@ header {
                 historyHTML += `
                     <div class="log-entry" data-id="${entry.id}">
                         <div class="log-entry-header">
-                            <div class="log-entry-date" style="text-transform: capitalize;">${formattedDate}</div>
-                            <div style="display: flex; align-items: center;">
+                            <div class="log-entry-date">${formattedDate}</div>
+                            <div class="log-entry-moods">
                                 ${practiceButtonHTML}
-                                <div class="log-entry-moods">
-                                    ${moodsHTML}
-                                </div>
+                                ${moodsHTML}
                             </div>
                         </div>
                         ${entry.notes ? `<div class="log-entry-notes">${entry.notes}</div>` : ''}
                         ${tagsHTML ? `<div class="log-entry-tags">${tagsHTML}</div>` : ''}
                         ${asanasHTML ? `<div class="log-entry-tags">${asanasHTML}</div>` : ''}
-                        <button class="edit-notes-btn" data-id="${entry.id}">Editar</button>
+                        <button class="delete-entry-btn" data-id="${entry.id}">Eliminar</button>
                     </div>
                 `;
             });
             
             logHistoryContainer.innerHTML = historyHTML;
             
-            // Añadir event listeners para los botones de edición
-            document.querySelectorAll('.edit-notes-btn').forEach(button => {
+            // Añadir event listeners para los botones de eliminar
+            document.querySelectorAll('.delete-entry-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const entryId = this.getAttribute('data-id');
-                    editLogEntry(entryId);
+                    if (confirm('¿Estás seguro de que quieres eliminar esta entrada?')) {
+                        deleteEntryById(entryId);
+                    }
                 });
             });
         }
 
-        // Editar una entrada existente
-        function editLogEntry(entryId) {
-            const entry = logHistory.find(e => e.id === entryId);
-            if (!entry) return;
+        // Eliminar entrada por ID
+        async function deleteEntryById(entryId) {
+            try {
+                // Eliminar de Supabase
+                const { error } = await supabase
+                    .from('log_entries')
+                    .delete()
+                    .eq('id', entryId);
+
+                if (error) throw error;
+                
+                // Eliminar del historial local
+                logHistory = logHistory.filter(entry => entry.id !== entryId);
+                
+                // Actualizar visualización
+                displayLogHistory();
+                updateStatistics();
+                
+                alert('Entrada eliminada correctamente');
+                
+            } catch (error) {
+                console.error('Error al eliminar en Supabase:', error);
+                alert('Error al eliminar: ' + error.message);
+            }
+        }
+        // Actualizar estadísticas
+        function updateStatistics() {
+            const today = new Date();
+            const statsSummary = document.getElementById('stats-summary');
+            const statsChart = document.getElementById('stats-chart');
             
-            // Cargar datos en el formulario actual
-            editingEntryId = entryId;
-            currentLogEntry = {...entry};
+            // Filtrar entradas desde el 1/11/2025
+            const filteredEntries = logHistory.filter(entry => 
+                entry.date >= startDate && entry.practiced
+            );
             
-            // Actualizar UI
-            document.getElementById('practice-button').classList.toggle('yes', entry.practiced);
-            document.querySelector('.practice-state').textContent = entry.practiced ? 'SÍ' : 'NO';
+            // Calcular días desde el 1/11/2025 hasta hoy
+            const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
             
-            // Limpiar y actualizar moods seleccionados
-            selectedMoods = [];
-            document.querySelectorAll('.mood-item').forEach(item => {
-                item.classList.remove('selected');
+            // Calcular estadísticas
+            const practiceCount = filteredEntries.length;
+            const practiceRatio = daysSinceStart > 0 ? (practiceCount / daysSinceStart) * 100 : 0;
+            
+            // Actualizar resumen
+            statsSummary.innerHTML = `
+                
+                <strong>${practiceCount}/${daysSinceStart} días de práctica - ${practiceRatio.toFixed(1)}%</strong>
+                <br><i><div style="font-size: 0.8rem; color: #333;">desde 1/11/2025</div>
+            `;
+            
+            // Generar datos para el gráfico (frecuencia de moods)
+            const moodFrequencyData = getMoodFrequencyData();
+            
+            // Limpiar gráfico
+            statsChart.innerHTML = '';
+            
+            // Crear barras del gráfico
+            moodFrequencyData.forEach(data => {
+                const maxFrequency = Math.max(...moodFrequencyData.map(d => d.count));
+                const barHeight = maxFrequency > 0 ? (data.count / maxFrequency) * 100 : 0;
+                
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = `${barHeight}%`;
+                bar.style.backgroundColor = data.color;
+                
+                const value = document.createElement('div');
+                value.className = 'chart-value';
+                value.textContent = data.count;
+                
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                
+                // Crear el círculo con el emoji y color de fondo
+                const moodCircle = document.createElement('div');
+                moodCircle.className = 'chart-mood-circle';
+                moodCircle.innerHTML = data.emoji; // Usar innerHTML para renderizar el icono FontAwesome
+                moodCircle.style.backgroundColor = data.color;
+                moodCircle.title = data.label; // Tooltip con el nombre completo
+                
+                label.appendChild(moodCircle);
+                bar.appendChild(value);
+                bar.appendChild(label);
+                statsChart.appendChild(bar);
+            });
+        }
+
+        // Obtener frecuencia de moods
+        function getMoodFrequencyData() {
+            const moodCounts = {};
+            
+            // Inicializar contadores para todos los moods
+            moodOptions.forEach(mood => {
+                moodCounts[mood.name] = {
+                    label: mood.label,
+                    count: 0,
+                    color: mood.color,
+                    emoji: mood.emoji // Añadir el emoji para mostrarlo en el gráfico
+                };
             });
             
-            // Seleccionar moods de la entrada
-            entry.moods.forEach(mood => {
-                const moodIndex = moodOptions.findIndex(m => m.name === mood.name);
-                if (moodIndex !== -1) {
-                    selectedMoods.push(moodIndex);
-                    document.querySelector(`.mood-item[data-index="${moodIndex}"]`).classList.add('selected');
+            // Contar frecuencia de cada mood en todas las entradas
+            logHistory.forEach(entry => {
+                if (entry.moods && Array.isArray(entry.moods)) {
+                    entry.moods.forEach(mood => {
+                        if (moodCounts[mood.name]) {
+                            moodCounts[mood.name].count++;
+                        }
+                    });
                 }
             });
             
-            // Actualizar notas
-            document.getElementById('practice-notes').value = entry.notes || '';
+            // Convertir a array y ordenar por frecuencia (mayor a menor)
+            const moodFrequencyData = Object.values(moodCounts)
+                .filter(mood => mood.count > 0)
+                .sort((a, b) => b.count - a.count);
             
-            // Actualizar tags
-            currentTags = [...entry.tags];
-            updateTagsDisplay();
-            
-            // Actualizar asanas
-            currentAsanas = [...entry.asanas];
-            updateAsanasDisplay();
-            
-            // Desplazar hacia arriba para ver el formulario
-            document.getElementById('log').scrollIntoView({ behavior: 'smooth' });
+            return moodFrequencyData;
         }
+
 
         // Actualizar visualización de tags
         function updateTagsDisplay() {
@@ -1231,6 +1506,9 @@ header {
             });
             currentLogEntry.moods = [];
             
+            // Limpiar fecha (establecer a hoy)
+            document.getElementById('practice-date').valueAsDate = new Date();
+            
             // Limpiar notas
             document.getElementById('practice-notes').value = '';
             currentLogEntry.notes = '';
@@ -1245,19 +1523,15 @@ header {
             updateAsanasDisplay();
             currentLogEntry.asanas = [];
             
-            // Restablecer fecha
+            // Restablecer fecha en el header
             const now = new Date();
             const formattedDate = now.toLocaleDateString('es-ES', {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric'
             });
-            document.getElementById('current-date').textContent = `HOY: ${formattedDate}`;
-            
-            // Limpiar ID de edición
-            editingEntryId = null;
+            document.getElementById('current-date').textContent = `${formattedDate}`;
         }
     </script>
 </body>
-
 </html>
