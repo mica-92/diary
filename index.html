@@ -93,7 +93,7 @@
             flex-direction: column;
             height: 100vh;
             padding-top: 60px;
-            padding-bottom: 60px;
+            padding-bottom: 70px;
         }
 
         .content {
@@ -417,6 +417,8 @@
             margin-top: 12px;
             border-top: 2px solid #333;
             background-color: #515b4470;
+            padding-bottom: 20px; /* Añadir padding en la parte inferior del historial */
+
             
         }
 
@@ -755,6 +757,17 @@
     color: var(--text-dark);
     flex: 1;
     text-align: left;
+}
+
+/* Para pantallas muy pequeñas, ajustar aún más */
+@media (max-width: 480px) {
+    .app-container {
+        padding-bottom: 75px; /* Un poco más de espacio en móviles muy pequeños */
+    }
+    
+    .content {
+        padding-bottom: 15px;
+    }
 }
     </style>
 </head>
